@@ -33,37 +33,7 @@ const generateSudoku = (): Board => {
 
     return true;
   };
-  const createPuzzle = (board: Board, difficulty: string): Board => {
-    let newBoard = [...board];
-    let numberOfEmptyCells: number;
 
-    // Imposta il numero di celle vuote in base alla difficoltà
-    switch (difficulty) {
-      case 'easy':
-        numberOfEmptyCells = 30; // Rimuovi 30 numeri per un puzzle facile
-        break;
-      case 'medium':
-        numberOfEmptyCells = 40; // Rimuovi 40 numeri per un puzzle medio
-        break;
-      case 'hard':
-        numberOfEmptyCells = 50; // Rimuovi 50 numeri per un puzzle difficile
-        break;
-      default:
-        numberOfEmptyCells = 30; // Predefinito facile
-    }
-
-    // Rimuovi celle in modo casuale
-    while (numberOfEmptyCells > 0) {
-      const row = Math.floor(Math.random() * 9);
-      const col = Math.floor(Math.random() * 9);
-      if (newBoard[row][col] !== null) {
-        newBoard[row][col] = null; // Rimuovi il numero
-        numberOfEmptyCells--;
-      }
-    }
-
-    return newBoard;
-  };
   const solveSudoku = (board: Board): boolean => {
     for (let row = 0; row < 9; row++) {
       for (let col = 0; col < 9; col++) {
@@ -168,32 +138,6 @@ const SudokuApp: React.FC = () => {
     }
   }, [board]);
 
-  const handleCellPress = (row: number, col: number) => {
-    if (selectedNumber) {
-      const newBoard = [...board];
-      newBoard[row][col] = parseInt(selectedNumber); // Inserisci il numero selezionato nella cella
-      setBoard(newBoard);
-    }
-    setSelectedCell({ row, col }); // Imposta la cella selezionata
-  };
-
-  const handleNumberPress = (number: string) => {
-    setSelectedNumber(number); // Aggiorna il numero selezionato
-  };
-
-  const handleGenerateSudoku = (difficulty: string) => {
-    const completeBoard = generateSudoku(); // Griglia completa
-    const puzzle = createPuzzle(completeBoard, difficulty); // Crea il puzzle con la difficoltà scelta
-    setBoard(puzzle); // Imposta la griglia con il puzzle generato
-    setGameCompleted(false); // Resetta il messaggio di congratulazioni
-  };
-
-  const handleClear = () => {
-    setBoard(generateEmptyBoard());
-    setSelectedNumber(null);
-    setGameCompleted(false); // Nasconde il messaggio di congratulazioni quando si pulisce la griglia
-  };
-// Funzione per rimuovere numeri dalla griglia in base alla difficoltà
   const createPuzzle = (board: Board, difficulty: string): Board => {
     let newBoard = [...board];
     let numberOfEmptyCells: number;
@@ -225,6 +169,33 @@ const SudokuApp: React.FC = () => {
 
     return newBoard;
   };
+
+  const handleCellPress = (row: number, col: number) => {
+    if (selectedNumber) {
+      const newBoard = [...board];
+      newBoard[row][col] = parseInt(selectedNumber); // Inserisci il numero selezionato nella cella
+      setBoard(newBoard);
+    }
+    setSelectedCell({ row, col }); // Imposta la cella selezionata
+  };
+
+  const handleNumberPress = (number: string) => {
+    setSelectedNumber(number); // Aggiorna il numero selezionato
+  };
+
+  const handleGenerateSudoku = (difficulty: string) => {
+    const completeBoard = generateSudoku(); // Griglia completa
+    const puzzle = createPuzzle(completeBoard, difficulty); // Crea il puzzle con la difficoltà scelta
+    setBoard(puzzle); // Imposta la griglia con il puzzle generato
+    setGameCompleted(false); // Resetta il messaggio di congratulazioni
+  };
+
+  const handleClear = () => {
+    setBoard(generateEmptyBoard());
+    setSelectedNumber(null);
+    setGameCompleted(false); // Nasconde il messaggio di congratulazioni quando si pulisce la griglia
+  };
+
   const handleClearCell = () => {
     if (selectedCell) {
       const { row, col } = selectedCell;
@@ -234,6 +205,7 @@ const SudokuApp: React.FC = () => {
       setSelectedCell(null); // Deseleziona la cella dopo averla pulita
     }
   };
+
   const renderBoard = () => {
     return board.map((row, rowIndex) => (
         <View style={styles.row} key={rowIndex}>
