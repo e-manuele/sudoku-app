@@ -137,7 +137,6 @@ const SudokuApp: React.FC = () => {
       setGameCompleted(false); // Nascondi il messaggio se non è corretto
     }
   }, [board]);
-
   const createPuzzle = (board: Board, difficulty: string): Board => {
     let newBoard = [...board];
     let numberOfEmptyCells: number;
