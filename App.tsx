@@ -34,25 +34,31 @@ const generateSudoku = (): Board => {
     return true;
   };
 
+  const shuffleArray = (array: number[]): number[] => {
+    return array.sort(() => Math.random() - 0.5);
+  };
+
   const solveSudoku = (board: Board): boolean => {
     for (let row = 0; row < 9; row++) {
       for (let col = 0; col < 9; col++) {
         if (board[row][col] === null) {
-          for (let num = 1; num <= 9; num++) {
+          const numbers = shuffleArray([1, 2, 3, 4, 5, 6, 7, 8, 9]); // Numeri randomizzati
+          for (let num of numbers) {
             if (isSafe(board, row, col, num)) {
               board[row][col] = num;
               if (solveSudoku(board)) {
                 return true;
               }
-              board[row][col] = null; // backtrack
+              board[row][col] = null; // Backtracking
             }
           }
-          return false;
+          return false; // Se nessun numero è valido, torna indietro
         }
       }
     }
-    return true;
+    return true; // Tutte le celle sono riempite
   };
+
 
   solveSudoku(board);
   return board;
@@ -285,6 +291,8 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#f5f5f5', // Un grigio chiaro più delicato
   },
+  initialCell: { backgroundColor: '#ddd' },
+  initialCellText: { color: '#333', fontWeight: 'bold' },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
